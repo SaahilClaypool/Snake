@@ -6,8 +6,21 @@ public class Map {
 
 	Object[][] field;
 	Fruit f;
-	Snake s;
-	
+	Snake s1;
+
+
+
+    Snake s2;
+
+
+    public Snake getS2() {
+        return s2;
+    }
+    public Snake getS1() {
+        return s1;
+    }
+
+
 	boolean isOver = false;
 	public Map(int rows, int cols){
 		f = new Fruit(new Point((rows - 1)/2 + 1, (cols -1)/2));
@@ -19,7 +32,8 @@ public class Map {
 				field[i][j] = null;
 			}
 		}
-		s = new Snake (3, new Point(rows / 2, 0));
+		s1 = new Snake (3, new Point(rows / 2, 0));
+		s2 = new Snake (3, new Point(rows / 2, cols/2));
 	}
 	public void MoveFruit(){
 		Point p = new Point((int)(Math.random() * rows), (int)(Math.random()*cols) );
@@ -50,37 +64,57 @@ public class Map {
 		this.setSpot(f.getP(), f);
 		
 		
-		Node[] n = s.getPoints();
-		for(int i = 0; i < n.length; i++){
-			if(n[i] != null){
-				if(this.isContained(n[i].getP())){
-					if(this.getSpot(n[i].getP()) == null)
-						this.setSpot(n[i].getP(), n[i]);
-					else if(this.getSpot(n[i].getP()) instanceof Fruit){
-						s.growLength(2);
-						this.setSpot(n[i].getP(), n[i]);
-						this.MoveFruit();
-					}
-					else{
-						isOver = true;
-					}
-				}
-				else isOver = true;
-			}
-		}
+		Node[] n = s1.getPoints();
+        for(int i = 0; i < n.length; i++){
+            if(n[i] != null){
+                if(this.isContained(n[i].getP())){
+                    if(this.getSpot(n[i].getP()) == null)
+                        this.setSpot(n[i].getP(), n[i]);
+                    else if(this.getSpot(n[i].getP()) instanceof Fruit){
+                        s1.growLength(2);
+                        this.setSpot(n[i].getP(), n[i]);
+                        this.MoveFruit();
+                    }
+                    else{
+                        isOver = true;
+                    }
+                }
+                else isOver = true;
+            }
+        }
+
+        Node[] n2 = s2.getPoints();
+        for(int i = 0; i < n2.length; i++){
+            if(n2[i] != null){
+                if(this.isContained(n2[i].getP())){
+                    if(this.getSpot(n2[i].getP()) == null)
+                        this.setSpot(n2[i].getP(), n2[i]);
+                    else if(this.getSpot(n2[i].getP()) instanceof Fruit){
+                        s2.growLength(2);
+                        this.setSpot(n2[i].getP(), n2[i]);
+                        this.MoveFruit();
+                    }
+                    else{
+                        isOver = true;
+                    }
+                }
+                else isOver = true;
+            }
+        }
 	}
-	public void setSnakeDirection(double d){
+	public void setDirS(double d, Snake s){
 		s.setDirection(d);
 	}
-	public void moveSnake(){
-		//System.out.println(s.getDirection());
+
+	public void moveSnake(Snake s){
+		//System.out.println(s1.getDirection());
 		Point old = s.getPoints()[0].getP();
 		System.out.println("OLD  " + old);
-		System.out.println("ROW CHANGE " + old.getRow() + Math.sin(s.getDirection()));
-		System.out.println("COL CHANGE " + old.getCol() + Math.cos(s.getDirection()));
+		System.out.println("ROW CHANGE " + old.getRow() + Math.sin(s1.getDirection()));
+		System.out.println("COL CHANGE " + old.getCol() + Math.cos(s1.getDirection()));
 		
-		Point n = new Point(Math.round(old.getRow() + Math.sin(s.getDirection())), 
-				Math.round(old.getCol() + Math.cos(s.getDirection())));
+		Point n = new Point(Math.round(old.getRow() + Math.sin(s1.getDirection())),
+				Math.round(old.getCol() + Math.cos(s1.getDirection())));
 		System.out.println("NEW  " + n);
 		
 		s.move(n);
@@ -125,11 +159,11 @@ public static void main (String[] args){
 	 m.updateBoard();
 	 System.out.println(m);
 	 
-	m.moveSnake();
+	m.moveSnake(m.getS1());
 	m.updateBoard();
 	System.out.println(m);
 	
-	m.moveSnake();
+	m.moveSnake(m.getS1());
 	m.updateBoard();
 	System.out.println(m);
 	
@@ -140,10 +174,10 @@ public static void main (String[] args){
 
 
 	
-	m.setSnakeDirection(Snake.UP);
+	m.setDirS(Snake.UP, m.getS1());
 
 	
-	m.moveSnake();
+	m.moveSnake(m.getS1());
 	m.updateBoard();
 	System.out.println(m);
  }

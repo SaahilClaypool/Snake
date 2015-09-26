@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_snakej" default="compile.module.snakej">
+  <dirname property="module.snakej.basedir" file="${ant.file.module_snakej}"/>
+  
+  <property name="module.jdk.home.snakej" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.snakej" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.snakej" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.snakej" value="-encoding windows-1252 -source 8 ${compiler.args}"/>
+  
+  <property name="snakej.output.dir" value="${module.snakej.basedir}/bin"/>
+  <property name="snakej.testoutput.dir" value="${module.snakej.basedir}/bin"/>
+  
+  <path id="snakej.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="snakej.module.production.classpath">
+    <path refid="${module.jdk.classpath.snakej}"/>
+  </path>
+  
+  <path id="snakej.runtime.production.module.classpath">
+    <pathelement location="${snakej.output.dir}"/>
+  </path>
+  
+  <path id="snakej.module.classpath">
+    <path refid="${module.jdk.classpath.snakej}"/>
+    <pathelement location="${snakej.output.dir}"/>
+  </path>
+  
+  <path id="snakej.runtime.module.classpath">
+    <pathelement location="${snakej.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.snakej">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.snakej">
+    <patternset refid="excluded.from.module.snakej"/>
+  </patternset>
+  
+  <path id="snakej.module.sourcepath">
+    <dirset dir="${module.snakej.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.snakej" depends="compile.module.snakej.production,compile.module.snakej.tests" description="Compile module SnakeJ"/>
+  
+  <target name="compile.module.snakej.production" depends="register.custom.compilers" description="Compile module SnakeJ; production classes">
+    <mkdir dir="${snakej.output.dir}"/>
+    <javac2 destdir="${snakej.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.snakej}/javac">
+      <compilerarg line="${compiler.args.snakej}"/>
+      <bootclasspath refid="snakej.module.bootclasspath"/>
+      <classpath refid="snakej.module.production.classpath"/>
+      <src refid="snakej.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.snakej"/>
+    </javac2>
+    
+    <copy todir="${snakej.output.dir}">
+      <fileset dir="${module.snakej.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.snakej.tests" depends="register.custom.compilers,compile.module.snakej.production" description="compile module SnakeJ; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.snakej" description="cleanup module">
+    <delete dir="${snakej.output.dir}"/>
+    <delete dir="${snakej.testoutput.dir}"/>
+  </target>
+</project>

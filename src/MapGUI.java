@@ -128,7 +128,8 @@ public class MapGUI extends JPanel  {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				m.updateBoard();
-				m.moveSnake();
+				m.moveSnake(m.getS1());
+				m.moveSnake(m.getS2());
 
 				self.repaint();
 
@@ -173,23 +174,31 @@ public class MapGUI extends JPanel  {
 						switch (keyCode) {
 						case KeyEvent.VK_UP:
 							//System.out.println("HERE");
-							m.m.setSnakeDirection(Snake.UP);
-							m.m.moveSnake();
+							m.m.setDirS(Snake.UP, m.m.getS1());
+							m.m.moveSnake(m.m.getS1());
+							m.m.setDirS(Snake.UP, m.m.getS2());
+							m.m.moveSnake(m.m.getS2());
 							m.repaint();
 							break;
 						case KeyEvent.VK_DOWN:
-							m.m.setSnakeDirection(Snake.DOWN);
-							m.m.moveSnake();
+							m.m.setDirS(Snake.DOWN, m.m.getS1());
+							m.m.moveSnake(m.m.getS1());
+							m.m.setDirS(Snake.DOWN, m.m.getS2());
+							m.m.moveSnake(m.m.getS2());
 							m.repaint();
 							break;
 						case KeyEvent.VK_LEFT:
-							m.m.setSnakeDirection(Snake.LEFT);
-							m.m.moveSnake();
+							m.m.setDirS(Snake.LEFT, m.m.getS1());
+							m.m.moveSnake(m.m.getS1());
+							m.m.setDirS(Snake.LEFT, m.m.getS2());
+							m.m.moveSnake(m.m.getS2());
 							m.repaint();
 							break;
 						case KeyEvent.VK_RIGHT:
-							m.m.setSnakeDirection(Snake.RIGHT);
-							m.m.moveSnake();
+							m.m.setDirS(Snake.RIGHT,m.m.getS1());
+							m.m.moveSnake(m.m.getS1());
+							m.m.setDirS(Snake.RIGHT,m.m.getS2());
+							m.m.moveSnake(m.m.getS2());
 							m.repaint();
 							break;
 
